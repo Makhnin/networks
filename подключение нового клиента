@@ -1,0 +1,59 @@
+свитч д-линк
+create vlan Vlan47 tag 47 # создание влана
+config vlan Vlan47 add tagged 26 # порт аплинка tagged
+config vlan Vlan47 add untagged 17 # порт клиента untagged
+sh vlan
+sh ports
+sh band
+sh vlan port 26
+config ports 17 ena
+save
+
+маршрутизатор cisco
+sh interfaces description
+conf t
+interface gigabitEthernet 0/1.47
+encapsulation dot1Q 47
+ip address 10.13.47.1 255.255.255.252
+ip flow ingress
+ip nat inside
+ip virtual-reassembly in
+no cdp enable
+do wr mem
+
+create vlan Vlan243 tag 243 # создание влана
+config vlan Vlan243 add untagged 13 # порт аплинка tagged
+config vlan Vlan243 add tagged 16 # порт клиента untagged
+sh vlan
+config vlan Vlan243 add tagged 27,28 #
+sh ports
+sh band
+config ports 13 flow ena #
+3200 - sh vlan port 13
+config vlan Vlan243 del 13 # если клиентский порт уже в каком-то другом влане был
+config ports 13 ena #
+config band 13 rx 5120 tx 5120 # (в 20 мегабитах 20*1024 килобита)
+sh vlan vlanid 243 #
+sh vlan Vlan243 #
+________________________________________________________________________
+create vlan Vlan243 tag 243 #
+config vlan Vlan243 add tagged 27,28 #
+10.19.13.2
+sh vlan | i 243
+conf t
+vlan 243
+exit
+sh int status
+do sh int status
+do sh run int gi0/5
+do sh run int gi0/12
+interface GigabitEthernet0/5
+switchport trunk allowed vlan add 243 #
+wr
+interface GigabitEthernet0/0.243
+encapsulation dot1Q 243 #
+ip address 10.13.243.1 255.255.255.252
+ip flow ingress
+ip nat inside
+ip virtual-reassembly in
+no cdp enable
